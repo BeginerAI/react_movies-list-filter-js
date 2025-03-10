@@ -5,14 +5,20 @@ import moviesFromServer from './api/movies.json';
 
 export const App = () => {
   const [visibleMovies, setVisibleMovies] = useState(moviesFromServer);
+  const [query, setQuery] = useState('');
 
   function byQuery(q) {
+    setQuery(q);
+
     setVisibleMovies(
       moviesFromServer.filter(movie => {
-        return movie.title
-          .toLowerCase()
-          .trim()
-          .includes(q.toLowerCase().trim());
+        return (
+          movie.title.toLowerCase().trim().includes(q.toLowerCase().trim()) ||
+          movie.description
+            .toLowerCase()
+            .trim()
+            .includes(q.toLowerCase().trim())
+        );
       }),
     );
   }
@@ -29,6 +35,7 @@ export const App = () => {
 
             <div className="control">
               <input
+                value={query}
                 onChange={e => {
                   byQuery(e.target.value);
                 }}
